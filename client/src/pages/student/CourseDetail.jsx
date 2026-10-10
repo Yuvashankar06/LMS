@@ -149,9 +149,9 @@ const CourseDetail = () => {
     });
 
   if (isLoading) return <h1>Loading ...</h1>;
-
-  if (isError) return <h1> Failed to load course details</h1>;
   
+  if (isError) return <h1>Failed to load course details</h1>;
+
 
   const { course, purchased, purchaseStatus } = data;
   console.log(purchaseStatus);
