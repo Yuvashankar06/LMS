@@ -1,0 +1,23 @@
+
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Build output
+client/dist/
+server/dist/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*git status
+pnpm-debug.log*
+
+# Operating system
+.DS_Store
+Thumbs.db
