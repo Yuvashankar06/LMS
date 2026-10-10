@@ -68,14 +68,29 @@ export const login = async (req, res) => {
 };
 
 export const logout = async (_, res) => {
-    try {
-        return res.status(200).cookie("token", "", { maxAge: 0 }).json({ success: true, message: "Logged Out successfully" })
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: false, message: "Falied to LogOut" });
+  try {
+    const isProduction = process.env.NODE_ENV === "production";
 
-    }
-}
+    return res
+      .status(200)
+      .clearCookie("token", {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
+        path: "/",
+      })
+      .json({
+        success: true,
+        message: "Logged Out successfully",
+      });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to Log Out",
+    });
+  }
+};
 
 export const getUserProfile = async (req, res) => {
     try {
