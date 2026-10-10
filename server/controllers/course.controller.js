@@ -378,21 +378,77 @@ export const togglePublishCourse = async(req,res)=>{
     }
 }
 
-export const getPublishedCourse = async(_,res)=>{
-    try {
-        const courses = await Course.find({isPublished:true}).populate({path:"creator",select:"name photoUrl"});
-        if(!courses){
-            res.status(404).json({
-                message:"Course Not Found"
-            })
-        }
-        res.status(200).json({
-            courses,
-        })
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            message: "Failed to Get Published Courses"
-        });
-    }
-}
+// export const getPublishedCourse = async(_,res)=>{
+//     try {
+//         const courses = await Course.find({isPublished:true}).populate({path:"creator",select:"name photoUrl"});
+//         if(!courses){
+//             res.status(404).json({
+//                 message:"Course Not Found"
+//             })
+//         }
+//         res.status(200).json({
+//             courses,
+//         })
+//     } catch (error) {
+//         console.log(error);
+//         return res.status(500).json({
+//             message: "Failed to Get Published Courses"
+//         });
+//     }
+// }
+
+// export const getPublishedCourse = async (req, res) => {
+//   try {
+//     const courses = await Course.find({ isPublished: true })
+//       .populate({
+//         path: "creator",
+//         select: "name photoUrl",
+//       });
+
+//     console.log("Published courses found:", courses.length);
+
+//     return res.status(200).json({
+//       success: true,
+//       courses,
+//     });
+//   } catch (error) {
+//     console.error("Failed to get published courses:", error);
+
+//     return res.status(500).json({
+//       success: false,
+//       message: "Failed to Get Published Courses",
+//     });
+//   }
+// };
+
+export const getPublishedCourse = async (req, res) => {
+  try {
+    console.log("Database:", Course.db.name);
+    console.log("Collection:", Course.collection.name);
+
+    const allCourses = await Course.find({});
+    console.log("Total courses found:", allCourses.length);
+
+    const publishedCourses = await Course.find({
+      isPublished: true,
+    });
+
+    console.log(
+      "Published courses found:",
+      publishedCourses.length
+    );
+
+    return res.status(200).json({
+      database: Course.db.name,
+      collection: Course.collection.name,
+      totalCourses: allCourses.length,
+      publishedCourses: publishedCourses.length,
+      courses: publishedCourses,
+    });
+  } catch (error) {
+    console.error("Course diagnostic error:", error);
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
